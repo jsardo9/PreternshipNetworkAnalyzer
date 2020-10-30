@@ -1,1 +1,1 @@
-test file
+// Function declariation for NetworkAssess.cpp
