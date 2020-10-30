@@ -1,7 +1,7 @@
 /*************************************
  * File name: NetworkAssess.cpp
- * Authors: Jacob Sardo and Chase Brown
- * Emails: jsardo@nd.edu and cbrown54@nd.edu
+ * Authors: Jacob Sardo
+ * Emails: jsardo@nd.edu
  *
  * This file contains the main driver Function
  * in which pattern recognition is applied to
