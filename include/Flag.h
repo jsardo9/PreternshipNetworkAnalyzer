@@ -1,3 +1,12 @@
+/*************************************
+ * File name: Flag.h
+ * Authors: Jacob Sardo
+ * Emails: jsardo@nd.edu
+ *
+ * This file contains the Flag class which
+ * contains the time andinformation of a flagged
+ * latency
+ * ***********************************/
 #include <iostream>
 #include <vector>
 
