@@ -19,7 +19,7 @@ EXE := exe
 FundamentalObjs := $(OBJ)/Fundamental.o
 
 Quick: $(FundamentalObjs)
-	$(PP) $(CXXFLAGS) -o $(EXE)/Fundamental$(FundamentalObjs)
+	$(PP) $(CXXFLAGS) -o $(EXE)/Fundamental $(FundamentalObjs)
 	$(EXE)/./Fundamental
 
 $(OBJ)/Fundamental.o: $(SRC)/Fundamental.cpp
@@ -46,3 +46,4 @@ initialize:
 # Make clean
 clean :
 	rm -rf *.o $(OBJ)/* $(EXE)/*
+	rm -f data.txt
