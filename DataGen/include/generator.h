@@ -41,7 +41,7 @@ int genSpike(int freq) {
     int numAdded = 0;
     int spikeTime = 60 * ((rand() % 5) + 3); //average time for a spike is 2 - 7 min (converted to seconds)
     int lat = (rand() % 500) + 150; //generate random latency between 150 - 650
-    ofstream data;
+    std::ofstream data;
     data.open("data.txt", ios::app);
 
     while(spikeTime >= freq) {
@@ -62,7 +62,7 @@ int generate(int time, int freq, int expected) {
     //prev is to make sure we do not generate spikes on top of one another... they need to have some space between them in order to
     //create the most accurate results.
     int prev = 0;
-    ofstream data;
+    std::ofstream data;
     data.open("data.txt", ios::app); //opens the file in append mode
 
     data << num << "\t" << time << "\t" << freq << '\t' << expected << "\n";
