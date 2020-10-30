@@ -3,8 +3,6 @@
 
 #include "../include/generator.h"
 
-#include <iostream>
-
 int main(int argc, char* argv[]) {
     if(argc != 4) {
         COUT << "Incorrect arguements" << ENDL;
