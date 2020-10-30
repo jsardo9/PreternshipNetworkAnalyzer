@@ -15,29 +15,29 @@ SRC := src
 OBJ := obj
 EXE := exe
 
-# Command: make Fundamental
-FundamentalObjs := $(OBJ)/Fundamental.o
+# Command: make generate
+generateObjs := $(OBJ)/generate.o
 
-Quick: $(FundamentalObjs)
-	$(PP) $(CXXFLAGS) -o $(EXE)/Fundamental $(FundamentalObjs)
-	$(EXE)/./Fundamental
+generator: $(generateObjs)
+	$(PP) $(CXXFLAGS) -o $(EXE)/generate $(generateObjs)
+	# $(EXE)/./generate
 
-$(OBJ)/Fundamental.o: $(SRC)/Fundamental.cpp
-	$(PP) $(CXXFLAGS) -c $(SRC)/Fundamental.cpp -o $@
+$(OBJ)/generate.o: $(SRC)/generate.cpp
+	$(PP) $(CXXFLAGS) -c $(SRC)/generate.cpp -o $@
 
-QuickObjs := $(OBJ)/Quick.o
+generatorObjs := $(OBJ)/generator.o
 
-Fundamental: $(QuickObjs)
-	$(PP) $(CXXFLAGS) -o $(EXE)/Quick $(QuickObjs)
-	$(EXE)/./Quick
+generate: $(generatorObjs)
+	$(PP) $(CXXFLAGS) -o $(EXE)/generator $(generatorObjs)
+	$(EXE)/./generator
 
-$(OBJ)/Quick.o: $(SRC)/Fundamental.cpp $(INC)/Quick.h
-	$(PP) $(CXXFLAGS) -c $(SRC)/Fundamental.cpp -o $@
+$(OBJ)/generator.o: $(SRC)/generate.cpp $(INC)/generator.h
+	$(PP) $(CXXFLAGS) -c $(SRC)/generate.cpp -o $@
 
 
 
 # Make all
-all: SorDLLTest PQTest Creative
+all: generator
 
 # make initialize to create folders for the objects and executables
 initialize:
