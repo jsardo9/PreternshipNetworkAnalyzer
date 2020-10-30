@@ -14,6 +14,9 @@
 #define ENDL std::endl;
 #define FST std::ofstream;
 
+void genSpike(fstream& data, int freq) {
+
+}
 
 int generate(int time, int freq, int expected) {
     srand(time(NULL));
@@ -22,7 +25,7 @@ int generate(int time, int freq, int expected) {
     int prev = 0;
     FST data("data.txt");
 
-    data << num << "\t" << time << "\t" << freq << '\n';
+    data << num << "\t" << time << "\t" << freq << '\t' << expected << "\n";
 
     for(int i = 0; i < num; i++) {
         int lat = 0;
