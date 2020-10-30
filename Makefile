@@ -1,5 +1,5 @@
-# Authors: Jacob Sardo and Chase Brown
-# E-mails: jsardo@nd.edu cbrown54@nd.edu
+# Author: Jacob Sardo
+# E-mails: jsardo@nd.edu
 #
 # This is the Makefile for Preternship NetworkAssess Program
 
