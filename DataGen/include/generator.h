@@ -1,5 +1,11 @@
-//Author: Chase Brown
-//Email: cbrown54@nd.edu
+/*************************************
+ * File name: generator.h
+ * Authors: Jacob Sardo and Chase Brown
+ * Emails: jsardo@nd.edu and cbrown54@nd.edu
+ *
+ * This file contains the functions to randomly
+ * generate a network log
+ * ***********************************/
 
 #ifndef GENERATE_H
 #define GENERATE_H
@@ -13,8 +19,9 @@
 
 #define COUT std::cout;
 #define ENDL std::endl;
-// #define FST std::ofstream;
+#define FST std::ofstream;
 
+//this function will randomly decide a random value should be added or subtracted
 int addOrSub() {
     int random = rand() % 2; //0 = sub, 1 = add;
     if(random) {
@@ -25,6 +32,7 @@ int addOrSub() {
     }
 }
 
+//this function will genera
 int genLat(int lat) {
     int change = rand() % 20;
     int dir = addOrSub();
@@ -41,7 +49,7 @@ int genSpike(int freq) {
     int numAdded = 0;
     int spikeTime = 60 * ((rand() % 5) + 3); //average time for a spike is 2 - 7 min (converted to seconds)
     int lat = (rand() % 500) + 150; //generate random latency between 150 - 650
-    std::ofstream data;
+    FST data;
     data.open("data.txt", ios::app);
 
     while(spikeTime >= freq) {
@@ -54,15 +62,15 @@ int genSpike(int freq) {
     return numAdded;
 }
 
-int generate(int time, int freq, int expected) {
-    srand(time(NULL));
+int generate(int time, int freq, int expected, int seed) {
+    srand(seed);
     //num is going to be the number of data points generated
     int num = (time * 60 * 60) / freq;
 
     //prev is to make sure we do not generate spikes on top of one another... they need to have some space between them in order to
     //create the most accurate results.
     int prev = 0;
-    std::ofstream data;
+    FST data;
     data.open("data.txt", ios::app); //opens the file in append mode
 
     data << num << "\t" << time << "\t" << freq << '\t' << expected << "\n";
