@@ -13,13 +13,14 @@
 #include <list>
 #include "../include/NetworkFunctions.h"
 #include "../include/Period.h"
-
+#include "../include/Flag.h"
 
 int main() {
 
 //---------Key Data Structures and Variables------------
 //------------------------------------------------------
 std::list<Period> networkPeriods; //Stores recorded network latencies in each node
+VECT<Flag> flags; //stores all of the flags before they are sorted into periods
 
 //----Reading in data.txt and storing flags in DLL---
 //-----Potentially put below code in a function-------
@@ -27,7 +28,7 @@ IFST inData;
 inData.open("../DataGen/data.txt");
 
 if(!inData) {
-  COUT << "Error opening the input file" << ENDL;
+ 	COUT << "Error opening the input file" << ENDL;
 }
 
 //this vector will contain all of the arguements passed on from the first line of the date file
@@ -36,7 +37,6 @@ if(!inData) {
 //args[2] = frequency of latency data
 //args[3] = expected high latency periods
 VECT<int> args; 
-
 
 //----This will read the first line from data.text---
 //-----and save the arguements to a vector-------
@@ -51,15 +51,37 @@ while ((pos = line.find(delimiter)) != STR::npos) {
 
 //----this will read through the entire set of data ---
 //-----Potentially put below code in a function-------
-while(!inData.eof()) {
-  getline(inData, line);
-  COUT << line << ENDL;
-  if(checkFlag) {
+int count;
+int prev;
 
-  }
-
+for(count = 0; !inData.eof(); count++) {
+  	getline(inData, line);
+  	COUT << line << ENDL;
+  	if(checkFlag(atoi(line))) {
+		Flag temp = new Flag();
+		getline(inData, line);
+		temp.start = count;
+		temp.latencies.push_back(atoi(line));
+		temp.numLats = 1;
+		while(checkFlag(atoi(line)) == 1) {
+			getline(inData, line);
+			temp.latencies.push_back(atoi(line));
+			temp.numLats++;
+			count++;
+		}
+		flags.push_back(temp);
+  	}
 }
 inData.close()
+
+for(Flag flag : flags) {
+	//here we will compare each the starting points of the flag to determine which period it should go in.
+}
+
+
+
+
+
 
 
 

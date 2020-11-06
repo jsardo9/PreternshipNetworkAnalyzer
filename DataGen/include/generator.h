@@ -34,7 +34,7 @@ int addOrSub() {
 
 //this function will genera
 int genLat(int lat) {
-    int change = rand() % 20;
+    int change = rand() % 10;
     int dir = addOrSub();
     if(dir) {
         lat += change;
@@ -74,11 +74,11 @@ int generate(int time, int freq, int expected, int seed) {
     data.open("data.txt", ios::app); //opens the file in append mode
 
     data << num << "::" << time << "::" << freq << '::' << expected << "::";
-    int lat = 0;
+    int lat = 50;
     for(int i = 0; i < num; i++) {
         //this is checking to see if the previous was greater than 30min ago and has a random 1/10 chance of triggering a spike in latency.
         //OR if there is an expected spike.
-        if((prev >= ((1 / (freq / 60)) * 30) && (rand() % 10) == 1 ) ||  time % expected == 0) {
+        if((prev >= ((1 / (freq / 60)) * 30) && (rand() % 100) == 1 ) ||  time % expected == 0) {
             int add = genSpike(freq);
             i += add - 1;
             prev = 0;

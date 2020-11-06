@@ -23,11 +23,19 @@
 #define RD std::getline;
 #define STR std::string;
 
-int locateFlags() {
-    int found = 0;
+VECT collectFlags() {
+    VECT<int> flags;
 
-
-    return found;
+    
+    return flags;
 }
+
+int checkFlag(int latency) {
+    if(latency > 100) {
+        return 1;
+    }
+    return 0;
+}
+
 
 
