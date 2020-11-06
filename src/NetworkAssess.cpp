@@ -21,18 +21,48 @@ int main() {
 //------------------------------------------------------
 std::list<Period> networkPeriods; //Stores recorded network latencies in each node
 
-
 //----Reading in data.txt and storing flags in DLL---
 //-----Potentially put below code in a function-------
-std::fstream networkLog;
+IFST inData;
+inData.open("../DataGen/data.txt");
+
+if(!inData) {
+  COUT << "Error opening the input file" << ENDL;
+}
+
+//this vector will contain all of the arguements passed on from the first line of the date file
+//args[0] = number of latencies
+//args[1] = total time
+//args[2] = frequency of latency data
+//args[3] = expected high latency periods
+VECT<int> args; 
 
 
-//!!!!!! Not sure how we get these values if they are not in first line of data.txt!!!!!!
-int tPeriod = 1; // length of individual periods (hours)
-int nLats = 20; //number of latencies in the network log
-int latsPerPeriod = 5; //number of latencies per period
+//----This will read the first line from data.text---
+//-----and save the arguements to a vector-------
+getline(inData, line);
+size_t pos = 0;
+STR delimiter = '::';
 
-networkLog.open("data.txt", std::ios::in);
+while ((pos = line.find(delimiter)) != STR::npos) {
+    args.push_back(atoi(line.substr(0, pos)));
+    line.erase(0, pos + delimiter.length());
+}
+
+//----this will read through the entire set of data ---
+//-----Potentially put below code in a function-------
+while(!inData.eof()) {
+  getline(inData, line);
+  COUT << line << ENDL;
+  if(checkFlag) {
+
+  }
+
+}
+inData.close()
+
+
+
 
 // reading latencies into networkLats
 int currInPeriod = 0; // keeps track when we reach the end of a current period

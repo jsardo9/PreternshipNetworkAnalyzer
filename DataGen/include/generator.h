@@ -73,7 +73,7 @@ int generate(int time, int freq, int expected, int seed) {
     FST data;
     data.open("data.txt", ios::app); //opens the file in append mode
 
-    data << num << "\t" << time << "\t" << freq << '\t' << expected << "\n";
+    data << num << "::" << time << "::" << freq << '::' << expected << "::";
     int lat = 0;
     for(int i = 0; i < num; i++) {
         //this is checking to see if the previous was greater than 30min ago and has a random 1/10 chance of triggering a spike in latency.
