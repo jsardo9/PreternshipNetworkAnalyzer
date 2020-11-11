@@ -13,26 +13,78 @@
 #include <list>
 #include "../include/NetworkFunctions.h"
 #include "../include/Period.h"
-
+#include "../include/Flag.h"
 
 int main() {
 
 //---------Key Data Structures and Variables------------
 //------------------------------------------------------
 std::list<Period> networkPeriods; //Stores recorded network latencies in each node
-
+VECT<Flag> flags; //stores all of the flags before they are sorted into periods
 
 //----Reading in data.txt and storing flags in DLL---
 //-----Potentially put below code in a function-------
-std::fstream networkLog;
+IFST inData;
+inData.open("../DataGen/data.txt");
+
+if(!inData) {
+ 	COUT << "Error opening the input file" << ENDL;
+}
+
+//this vector will contain all of the arguements passed on from the first line of the date file
+//args[0] = number of latencies
+//args[1] = total time
+//args[2] = frequency of latency data
+//args[3] = expected high latency periods
+VECT<int> args; 
+
+//----This will read the first line from data.text---
+//-----and save the arguements to a vector-------
+getline(inData, line);
+size_t pos = 0;
+STR delimiter = '::';
+
+while ((pos = line.find(delimiter)) != STR::npos) {
+    args.push_back(atoi(line.substr(0, pos)));
+    line.erase(0, pos + delimiter.length());
+}
+
+//----this will read through the entire set of data ---
+//-----Potentially put below code in a function-------
+int count;
+int prev;
+
+for(count = 0; !inData.eof(); count++) {
+  	getline(inData, line);
+  	COUT << line << ENDL;
+  	if(checkFlag(atoi(line))) {
+		Flag temp = new Flag();
+		getline(inData, line);
+		temp.start = count;
+		temp.latencies.push_back(atoi(line));
+		temp.numLats = 1;
+		while(checkFlag(atoi(line)) == 1) {
+			getline(inData, line);
+			temp.latencies.push_back(atoi(line));
+			temp.numLats++;
+			count++;
+		}
+		flags.push_back(temp);
+  	}
+}
+inData.close()
+
+for(Flag flag : flags) {
+	//here we will compare each the starting points of the flag to determine which period it should go in.
+}
 
 
-//!!!!!! Not sure how we get these values if they are not in first line of data.txt!!!!!!
-int tPeriod = 1; // length of individual periods (hours)
-int nLats = 20; //number of latencies in the network log
-int latsPerPeriod = 5; //number of latencies per period
 
-networkLog.open("data.txt", std::ios::in);
+
+
+
+
+
 
 // reading latencies into networkLats
 int currInPeriod = 0; // keeps track when we reach the end of a current period

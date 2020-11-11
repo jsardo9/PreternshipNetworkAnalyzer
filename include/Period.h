@@ -10,9 +10,11 @@
 #include <vector>
 #include "Flag.h"
 
+#define VECT std::vector;
+
 struct Period{
   int tPeriod; //Time period in which the period covers (in hrs)
-  std::vector<Flag> flags; //list of all flags which occurred during tPeriod
+  VECT<Flag> flags; //list of all flags which occurred during tPeriod
 
 //-----------------Constructors-------------------------
 //------------------------------------------------------
