@@ -1,5 +1,12 @@
-//Author: Chase Brown & Jacob Sardo
-//Email: cbrown54@nd.edu
+
+/*************************************
+ * File name: generator.h
+ * Authors: Jacob Sardo and Chase Brown
+ * Emails: jsardo@nd.edu and cbrown54@nd.edu
+ *
+ * This file contains the functions to randomly
+ * generate a network log
+ * ***********************************/
 
 #ifndef GENERATOR_H
 #define GENERATOR_H
@@ -17,6 +24,7 @@
 #define APP std::ios_base::app
 #define FST std::ofstream
 
+//this function will randomly decide a random value should be added or subtracted
 int addOrSub() {
     int random = rand() % 2; //0 = sub, 1 = add;
     if(random) {
@@ -27,8 +35,9 @@ int addOrSub() {
     }
 }
 
+//this function will genera
 int genLat(int lat) {
-    int change = rand() % 20;
+    int change = rand() % 10;
     int dir = addOrSub();
     if(dir) {
         lat += change;
@@ -58,26 +67,24 @@ int genSpike(int freq) {
     return numAdded;
 }
 
-int generate(int time, int freq, int expected) {
-    //this still needs to integrate with time
-    srand(192);
+
+int generate(int time, int freq, int expected, int seed) {
+    srand(seed);
     //num is going to be the number of data points generated
     int num = (time * 60 * 60) / freq;
 
     //prev is to make sure we do not generate spikes on top of one another... they need to have some space between them in order to
     //create the most accurate results.
     int prev = 0;
-    FST data("data.txt");
-    data.close();
-    // data.open("data.txt", ios::app); //opens the file in append mode
+    FST data;
+    data.open("data.txt", APP); //opens the file in append mode
 
-    data << num << "\t" << time << "\t" << freq << '\t' << expected << "\n";
-    int lat = 40;
+    data << num << "::" << time << "::" << freq << "::" << expected << "::";
+    int lat = 50;
     for(int i = 0; i < num; i++) {
         //this is checking to see if the previous was greater than 30min ago and has a random 1/10 chance of triggering a spike in latency.
         //OR if there is an expected spike.
-        if((prev >= ((1 / (freq / 60)) * 30) && (rand() % 10) == 1 )) { // ||  time % expected == 0
-            COUT << "making spike" << ENDL;
+        if((prev >= ((1 / (freq / 60)) * 30) && (rand() % 100) == 1 ) ||  time % expected == 0) {
             int add = genSpike(freq);
             i += add - 1;
             prev = 0;

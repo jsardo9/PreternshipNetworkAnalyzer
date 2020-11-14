@@ -30,12 +30,10 @@ generatorObjs := $(OBJ)/generator.o
 
 generate: $(generatorObjs)
 	$(PP) $(CXXFLAGS) -o $(EXE)/generator $(generatorObjs)
-	$(EXE)/./generator
+	$(EXE)/./generate 
 
 $(OBJ)/generator.o: $(SRC)/generate.cpp $(INC)/generator.h
 	$(PP) $(CXXFLAGS) -c $(SRC)/generate.cpp -o $@
-
-
 
 # Make all
 all: generator generate

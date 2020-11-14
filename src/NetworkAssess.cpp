@@ -11,43 +11,115 @@
 #include <fstream>
 #include <string>
 #include <list>
-
+#include "../include/NetworkFunctions.h"
+#include "../include/Period.h"
+#include "../include/Flag.h"
 
 int main() {
+
 //---------Key Data Structures and Variables------------
 //------------------------------------------------------
-list<int> networkLats; //Stores recorded network latencies in each node
-int tInterval; //Time interval between each recorded latency from "networkLats"
+std::list<Period> networkPeriods; //Stores recorded network latencies in each node
+VECT<Flag> flags; //stores all of the flags before they are sorted into periods
+
+//----Reading in data.txt and storing flags in DLL---
+//-----Potentially put below code in a function-------
+IFST inData;
+inData.open("../DataGen/data.txt");
+
+if(!inData) {
+ 	COUT << "Error opening the input file" << ENDL;
+}
+
+//this vector will contain all of the arguements passed on from the first line of the date file
+//args[0] = number of latencies
+//args[1] = total time
+//args[2] = frequency of latency data
+//args[3] = expected high latency periods
+VECT<int> args; 
+
+//----This will read the first line from data.text---
+//-----and save the arguements to a vector-------
+getline(inData, line);
+size_t pos = 0;
+STR delimiter = '::';
+
+while ((pos = line.find(delimiter)) != STR::npos) {
+    args.push_back(atoi(line.substr(0, pos)));
+    line.erase(0, pos + delimiter.length());
+}
+
+//----this will read through the entire set of data ---
+//-----Potentially put below code in a function-------
+int count;
+int prev;
+
+for(count = 0; !inData.eof(); count++) {
+  	getline(inData, line);
+  	COUT << line << ENDL;
+  	if(checkFlag(atoi(line))) {
+		Flag temp = new Flag();
+		getline(inData, line);
+		temp.start = count;
+		temp.latencies.push_back(atoi(line));
+		temp.numLats = 1;
+		while(checkFlag(atoi(line)) == 1) {
+			getline(inData, line);
+			temp.latencies.push_back(atoi(line));
+			temp.numLats++;
+			count++;
+		}
+		flags.push_back(temp);
+  	}
+}
+inData.close()
+
+for(Flag flag : flags) {
+	//here we will compare each the starting points of the flag to determine which period it should go in.
+}
 
 
 
-//----Reading in NetworkLog.txt and storing it in DLL---
-//------------------------------------------------------
-fstream networkLog;
-int nLats; //number of latencies in the network log
-networkLog.open("../include/NetworkLog.txt", ios::in)
 
-// retreving first line from NetworkLog.txt which contains information regarding
-// total time contained in log (hrs) and the time interval between recordings (seconds)
-string hrs;
-getline(networkLog, hrs, '\t');
-string interval;
-getline(networkLog, interval);
 
-  
-tInterval = (int)interval;
-nLats = ((int)hours) * 3600)/ tInterval;
+
+
+
 
 // reading latencies into networkLats
-string currLatency;
-    for (int i = 0; i < nLats){  //read data from file object and put it into string.
-       getline(networkLog, currLatency)
-       networkLats.push_back((int)currLatency)
+int currInPeriod = 0; // keeps track when we reach the end of a current period
+Period currPeriod;
+std::vector<Flag> currFlags; // list of flags within the current period
+bool withinFlag = false; //true while index is currently within a flag
+
+    for (int i = 0; i < nLats; ++i){
+      if (currInPeriod == 0) {
+         currPeriod = Period(tPeriod, currFlags); // Creating a new Period if we are at index 0 of a Period
+      }
+
+       //pulling current latency
+       std::string currLatency;
+       getline(networkLog, currLatency);
+       int currLat = std::stoi(currLatency);
+
+       if (currLat > 100) {
+         if (!withinFlag) { // this means its the start of a new flag
+           withinFlag = true;
+           currFLags = std::vector<Flag>();
+         }
+      currFlags.push_back((int)currLatency)
+     }
+     else if (withinFlag) {// end of a flag means we need to add flag to current period
+       withinFlag = false;
+
+     }
+
+       currInPeriod = (currInPeriod + 1) % latsPerPeriod; // increase the index of location in the period
     }
+//------------------------------------------------------
 
 networkLog.close; //closing Network Log txt file
-//------------------------------------------------------
-//------------------------------------------------------
+
 
   return 0;
 }

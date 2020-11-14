@@ -1,5 +1,5 @@
-# Authors: Jacob Sardo and Chase Brown
-# E-mails: jsardo@nd.edu cbrown54@nd.edu
+# Author: Jacob Sardo
+# E-mails: jsardo@nd.edu
 #
 # This is the Makefile for Preternship NetworkAssess Program
 
@@ -18,14 +18,30 @@ OBJ := obj
 EXE := exe
 
 # Command: make NetworkAssess
-NetworkAssessObjs := $(OBJ)/NetworkAssess.o
+NetworkAssessObjs := $(OBJ)/NetworkAssess.o $(OBJ)/NetworkFunctions.o
 
 NetworkAssess: $(NetworkAssessObjs)
 	$(PP) $(PQCXX) -o $(EXE)/NetworkAssess $(NetworkAssessObjs)
 	$(EXE)/NetworkAssess
 
-$(OBJ)/NetworkAssess.o: $(SRC)/NetworkAssess.cpp
+$(OBJ)/NetworkAssess.o: $(SRC)/NetworkAssess.cpp $(INC)/NetworkFunctions.h
 	$(PP) $(PQCXX) -c $(SRC)/NetworkAssess.cpp -o $@
+
+$(OBJ)/NetworkFunctions.o: $(INC)/NetworkFunctions.cpp $(INC)/NetworkFunctions.h
+	$(PP) $(PQCXX) -c $(INC)/NetworkFunctions.cpp -o $@
+
+initialize:
+	mkdir $(OBJ) $(EXE)
+
+# Command: make classTest
+classTestObjs := $(OBJ)/classTest.o
+
+classTest: $(classTestObjs)
+	$(PP) $(PQCXX) -o $(EXE)/classTest $(classTestObjs)
+	$(EXE)/classTest
+
+$(OBJ)/classTest.o: $(SRC)/classTest.cpp
+	$(PP) $(PQCXX) -c $(SRC)/classTest.cpp -o $@
 
 initialize:
 	mkdir $(OBJ) $(EXE)

@@ -1,30 +1,41 @@
+/*************************************
+ * File name: Flag.h
+ * Authors: Jacob Sardo
+ * Emails: jsardo@nd.edu
+ *
+ * This file contains the Flag class which
+ * contains information of a flagged
+ * set of spiking latencies
+ * ***********************************/
 #include <iostream>
 #include <vector>
 
-class Flag{
-  private:
-    std::vector<int> time; // time is split as the following {hour, minute, second}
-    int latency;
-  public:
+struct Flag{
+    int start; // starting index of the spike
+    std::vector<int> latencies; // list of spiked latencies (use to calculate mean latency during the spike)
+    int numLats; // number of spiking latencies
+    double avgLat; // the overage latency over the course of the spike
+
 //-----------------Constructors-------------------------
 //------------------------------------------------------
-    Flag() : time(), latency(), traffic() {}
+    Flag() : start(), latencies(), numLats(), avgLat() {}
 
-    Flag(std::vector<int> tin, int latin, int trafin) : time(tin), latency(latin) {}
-
-//-----------------Public Methods-----------------------
-//------------------------------------------------------
-    std::vector<int> getTime() {
-      return time;
+    Flag(int startIn, std::vector<int> latsIn, int nLats) : start(startIn), latencies(latsIn), numLats(nLats), avgLat(0) {
+      avgLatCalculation();
     }
 
-    int getLatency() {
-      return latency;
+//-----------------Methods-------------------------
+//-------------------------------------------------
+  void avgLatCalculation() {
+    for (unsigned int i = 0; i < latencies.size(); ++i) {
+      avgLat = avgLat + latencies[i] * 1/(double)numLats;
     }
+  }
 
 //-----------------Ostream Overload Function------------
     friend std::ostream& operator<<(std::ostream& output, const Flag& theFlag){
-			 output <<  theFlag.time << " | Latency: " << theFlag.latency << std::endl;
-		   return output;
-		}
+    	 output << "Start Index: " << theFlag.start << " | Mean Latency: " << theFlag.avgLat << " | #Latencies: " << theFlag.numLats << std::endl;
+       return output;
+    }
+
 };
