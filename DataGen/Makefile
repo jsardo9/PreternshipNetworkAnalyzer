@@ -15,15 +15,16 @@ SRC := src
 OBJ := obj
 EXE := exe
 
+# $(EXE)/./generate
 # Command: make generate
 generateObjs := $(OBJ)/generate.o
 
 generator: $(generateObjs)
 	$(PP) $(CXXFLAGS) -o $(EXE)/generate $(generateObjs)
-	# $(EXE)/./generate
 
 $(OBJ)/generate.o: $(SRC)/generate.cpp
 	$(PP) $(CXXFLAGS) -c $(SRC)/generate.cpp -o $@
+
 
 generatorObjs := $(OBJ)/generator.o
 
@@ -37,11 +38,11 @@ $(OBJ)/generator.o: $(SRC)/generate.cpp $(INC)/generator.h
 
 
 # Make all
-all: generator
+all: generator generate
 
 # make initialize to create folders for the objects and executables
 initialize:
-	mkdir objects executables
+	mkdir $(OBJ) $(EXE)
 
 # Make clean
 clean :
