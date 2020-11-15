@@ -24,6 +24,9 @@
 #define APP std::ios_base::app
 #define FST std::ofstream
 
+int flags = 0;
+FST data;
+
 //this function will randomly decide a random value should be added or subtracted
 int addOrSub() {
     int random = rand() % 2; //0 = sub, 1 = add;
@@ -53,8 +56,8 @@ int genSpike(int freq) {
     int spikeTime = 60 * ((rand() % 5) + 3); //average time for a spike is 2 - 7 min (converted to seconds)
     // COUT << "spike time: " << spikeTime << ENDL;
     int lat = (rand() % 500) + 150; //generate random latency between 150 - 650
-    FST data;
-    data.open("data.txt", APP);
+    // FST data;
+    // data.open("data.txt", APP);
 
     while(spikeTime >= freq) {
         data << lat << "\n";
@@ -62,8 +65,9 @@ int genSpike(int freq) {
         spikeTime -= freq;
         numAdded++;
     }
-    COUT << "added: " << numAdded << ENDL;
-    data.close();
+    // COUT << "added: " << numAdded << ENDL;
+    // data.close();
+    flags++;
     return numAdded;
 }
 
@@ -76,7 +80,7 @@ int generate(int time, int freq, int expected, int seed) {
     //prev is to make sure we do not generate spikes on top of one another... they need to have some space between them in order to
     //create the most accurate results.
     int prev = 0;
-    FST data;
+
     data.open("data.txt", APP); //opens the file in append mode
 
     data << num << "::" << time << "::" << freq << "::" << expected << "::";
@@ -84,20 +88,24 @@ int generate(int time, int freq, int expected, int seed) {
     for(int i = 0; i < num; i++) {
         //this is checking to see if the previous was greater than 30min ago and has a random 1/10 chance of triggering a spike in latency.
         //OR if there is an expected spike.
-        if((prev >= ((1 / (freq / 60)) * 30) && (rand() % 100) == 1 ) ||  time % expected == 0) {
+        if((rand() % (num/4) == 1)  || (((i * freq * 100) / 3600)  % (expected * 100) == 0 && ((i * freq * 100) / 3600)  % (100) == 0)) { //prev >= ((1 / (60 / freq)) * 30) &&
+            COUT << ((i * freq * 100) / 3600) << ENDL;
+            COUT << "making spike" << ENDL;
             int add = genSpike(freq);
             i += add - 1;
             prev = 0;
         }
         else {
+            // COUT << "making data" << ENDL;
             lat = genLat(40);
-            data.open("data.txt", APP); //this is not ideal... I need to better understand file writing...
+            // data.open("data.txt", APP); //this is not ideal... I need to better understand file writing...
             data << lat << '\n';
-            data.close();
+            // data.close();
             prev++;
         }
     }
-
+    COUT << "made: " << flags << " flags" << ENDL;
+    data.close();
     return num;
 }
 

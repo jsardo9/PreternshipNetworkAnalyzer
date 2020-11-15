@@ -30,7 +30,7 @@ generatorObjs := $(OBJ)/generator.o
 
 generate: $(generatorObjs)
 	$(PP) $(CXXFLAGS) -o $(EXE)/generator $(generatorObjs)
-	$(EXE)/./generate 
+	$(EXE)/./generate 168 15 12 180
 
 $(OBJ)/generator.o: $(SRC)/generate.cpp $(INC)/generator.h
 	$(PP) $(CXXFLAGS) -c $(SRC)/generate.cpp -o $@
