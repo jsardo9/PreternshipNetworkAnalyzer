@@ -13,7 +13,7 @@
 struct Flag{
     int start; // starting index of the spike
     std::vector<int> latencies; // list of spiked latencies (use to calculate mean latency during the spike)
-    int numLats; // number of spiking latencies
+    int numLats = 0; // number of spiking latencies
     double avgLat; // the overage latency over the course of the spike
 
 //-----------------Constructors-------------------------

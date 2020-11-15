@@ -10,7 +10,7 @@
 #include <vector>
 #include "Flag.h"
 
-#define VECT std::vector;
+#define VECT std::vector
 
 struct Period{
   int tPeriod; //Time period in which the period covers (in hrs)

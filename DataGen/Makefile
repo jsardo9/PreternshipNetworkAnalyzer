@@ -1,4 +1,4 @@
-# Author: Chase Brown
+# Author: Chase Brown & Jacob Sardo
 # This is the Makefile for the CSE 20312 - Preternship
 # This Makefile contains the compiling commands to generate a new set of data
 
@@ -15,7 +15,6 @@ SRC := src
 OBJ := obj
 EXE := exe
 
-# $(EXE)/./generate
 # Command: make generate
 generateObjs := $(OBJ)/generate.o
 

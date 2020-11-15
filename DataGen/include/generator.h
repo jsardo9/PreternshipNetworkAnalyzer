@@ -83,7 +83,10 @@ int generate(int time, int freq, int expected, int seed) {
 
     data.open("data.txt", APP); //opens the file in append mode
 
-    data << num << "::" << time << "::" << freq << "::" << expected << "::";
+    data << num << '\n';
+    data << time << '\n';
+    data << freq << '\n';
+    data << expected << '\n';
     int lat = 50;
     for(int i = 0; i < num; i++) {
         //this is checking to see if the previous was greater than 30min ago and has a random 1/10 chance of triggering a spike in latency.

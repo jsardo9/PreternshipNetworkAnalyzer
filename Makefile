@@ -1,51 +1,45 @@
-# Author: Jacob Sardo
-# E-mails: jsardo@nd.edu
-#
-# This is the Makefile for Preternship NetworkAssess Program
+# Author: Chase Brown & Jacob Sardo
+# This is the Makefile for the CSE 20312 - Preternship
+# This Makefile contains the compiling commands to generate a new set of data
 
 # G++ is for the GCC compiler for C++
 PP := g++
 
-# CFLAGS are the compiler flages for when we compile C code in this course
-FLAGS := -O0 -g -Wall
-CXXFLAGS := -m64 -std=c++11 $(FLAGS)
-PQCFLAGS := -O0 -g -Wall -Wextra -Wconversion -Wshadow -pedantic -Werror -lm
-PQCXX    := -m64 -std=c++11 -Weffc++ $(PQCFLAGS)
+# CXXFLAGS are the compiler flages for when we compile C++ code in this course
+FLAGS := -O0 -g -Wall -Wextra -Wconversion -Wshadow -pedantic -Werror
+CXXFLAGS := -m64 -std=c++11 -Weffc++ $(FLAGS)
 
+# Variables for Folders
 INC := include
 SRC := src
 OBJ := obj
 EXE := exe
 
 # Command: make NetworkAssess
-NetworkAssessObjs := $(OBJ)/NetworkAssess.o $(OBJ)/NetworkFunctions.o
+NetworkAssessObjs := $(OBJ)/NetworkAssess.o
 
-NetworkAssess: $(NetworkAssessObjs)
-	$(PP) $(PQCXX) -o $(EXE)/NetworkAssess $(NetworkAssessObjs)
-	$(EXE)/NetworkAssess
+NetworkFunctions: $(NetworkAssessObjs)
+	$(PP) $(CXXFLAGS) -o $(EXE)/NetworkAssess $(NetworkAssessObjs)
 
-$(OBJ)/NetworkAssess.o: $(SRC)/NetworkAssess.cpp $(INC)/NetworkFunctions.h
-	$(PP) $(PQCXX) -c $(SRC)/NetworkAssess.cpp -o $@
+$(OBJ)/NetworkAssess.o: $(SRC)/NetworkAssess.cpp
+	$(PP) $(CXXFLAGS) -c $(SRC)/NetworkAssess.cpp -o $@
 
-$(OBJ)/NetworkFunctions.o: $(INC)/NetworkFunctions.cpp $(INC)/NetworkFunctions.h
-	$(PP) $(PQCXX) -c $(INC)/NetworkFunctions.cpp -o $@
+NetworkFunctionsObjs := $(OBJ)/NetworkFunctions.o
 
-initialize:
-	mkdir $(OBJ) $(EXE)
+NetworkAssess: $(NetworkFunctionsObjs)
+	$(PP) $(CXXFLAGS) -o $(EXE)/NetworkFunctions $(NetworkFunctionsObjs)
+	$(EXE)/./NetworkAssess
 
-# Command: make classTest
-classTestObjs := $(OBJ)/classTest.o
+$(OBJ)/NetworkFunctions.o: $(SRC)/NetworkAssess.cpp $(INC)/NetworkFunctions.h
+	$(PP) $(CXXFLAGS) -c $(SRC)/NetworkAssess.cpp -o $@
 
-classTest: $(classTestObjs)
-	$(PP) $(PQCXX) -o $(EXE)/classTest $(classTestObjs)
-	$(EXE)/classTest
+# Make all
+all: NetworkFunctions NetworkAssess
 
-$(OBJ)/classTest.o: $(SRC)/classTest.cpp
-	$(PP) $(PQCXX) -c $(SRC)/classTest.cpp -o $@
-
+# make initialize to create folders for the objects and executables
 initialize:
 	mkdir $(OBJ) $(EXE)
 
 # Make clean
-clean:
-		rm -rf *.o $(OBJ)/* $(EXE)/*
+clean :
+	rm -rf *.o $(OBJ)/* $(EXE)/*
