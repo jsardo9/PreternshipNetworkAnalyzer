@@ -53,40 +53,52 @@ int main() {
         // }
         // COUT << "args done" << ENDL;
 
-        Info info = Info();
-        info.time = 0;
-        info.freq = args[2];
-        info.netf = 0;
-
-        Bar b = Bar();
-        b.r = 2;
-        b.bars = 10;
-        updateWin(b, flag, info);
-
-
-
-
-        // //----this will read through the entire set of data ---
-        // for(int i = 1; i <= args.at(0); i++) {
-        //     inData.getline(line, 20);
-        //     // COUT << line << ENDL;
-        //     if(checkLat(atoi(line))) {
-        //         Flag flag = Flag();
-        //         flag.start = i;
-        //         while(checkLat(atoi(line))) {
-        //             flag.latencies.push_back(atoi(line));
-        //             flag.numLats++;
-        //             inData.getline(line, 20);
-        //             i++;
-        //         }
-        //         flag.avgLatCalculation();
-        //         flags.push_back(flag);
-        //         COUT << "flag made with avg: " << flag.avgLat << ENDL;
-        //     }
-        //     else {
+        // Info info = Info();
+        // info.time = 90120;
+        // info.freq = args[2];
+        // info.netf = 0;
         //
-        //     }
-        // }
+        // Flag flag = Flag();
+        // flag.start = 1;
+        // flag.latencies.push_back(189);
+        // flag.latencies.push_back(130);
+        // flag.numLats = 2;
+        // flag.avgLatCalculation();
+        // printf("%f\n", flag.avgLat);
+        //
+        // Period period = Period();
+        // period.tPeriod = 12;
+        // period.flags.push_back(flag);
+        //
+        // Bar b = Bar();
+        // b.r = 2;
+        // b.bars = 10;
+        updateWin(b, period, flag, info);
+
+
+
+
+        //----this will read through the entire set of data ---
+        for(int i = 1; i <= args.at(0); i++) {
+
+            inData.getline(line, 20);
+            if(checkLat(atoi(line))) {
+                Flag flag = Flag();
+                flag.start = i;
+                while(checkLat(atoi(line))) {
+                    flag.latencies.push_back(atoi(line));
+                    flag.numLats++;
+                    inData.getline(line, 20);
+                    i++;
+                }
+                flag.avgLatCalculation();
+                flags.push_back(flag);
+                COUT << "flag made with avg: " << flag.avgLat << ENDL;
+            }
+            else {
+
+            }
+        }
         inData.close();
     }
     else {

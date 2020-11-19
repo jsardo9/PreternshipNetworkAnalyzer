@@ -267,7 +267,7 @@ typedef struct {
 
 struct Flag{
     int start; // starting index of the spike
-    std::vector<int> latencies; // list of spiked latencies (use to calculate mean latency during the spike)
+    VECT<int> latencies; // list of spiked latencies (use to calculate mean latency during the spike)
     int numLats = 0; // number of spiking latencies
     double avgLat; // the overage latency over the course of the spike
 
@@ -322,10 +322,35 @@ typedef struct {
     int netf;
 }   Info;
 
-// void updatePeriod(Period per) {
-//
-// }
-//
+void updatePeriod(Period per, Info info) {
+    char temp[20];
+
+    sprintf(temp, "%02d", (int)per.flags.size());
+    //flags
+    simg_setpixel(&img, 12, 18, 3, temp[0]);
+    simg_setpixel(&img, 13, 18, 3, temp[1]);
+
+    //time
+
+    sprintf(temp, "%02d", (info.time / 3600) % 12);
+    //hours
+    simg_setpixel(&img, 12, 17, 3, temp[0]);
+    simg_setpixel(&img, 13, 17, 3, temp[1]);
+
+    sprintf(temp, "%02d", (info.time / 60) % 60);
+    //minutes
+    simg_setpixel(&img, 15, 17, 3, temp[0]);
+    simg_setpixel(&img, 16, 17, 3, temp[1]);
+
+    //length
+    sprintf(temp, "%02d", per.tPeriod);
+    simg_setpixel(&img, 12, 16, 3, temp[0]);
+    simg_setpixel(&img, 13, 16, 3, temp[1]);
+
+
+    editorRefreshScreen(&img);
+}
+
 void updateBars(Bar bar) {
     //15 rows
     for (int y = 0; y < 14; y++) {
@@ -342,47 +367,74 @@ void updateBars(Bar bar) {
 
     editorRefreshScreen(&img);
 }
-//
-// void updateFlag(Flag flag) {
-//
-// }
+
+void updateFlag(Flag flag, Info info) {
+    //average latency
+    char temp[10];
+    sprintf(temp, "%03.2f", flag.avgLat);
+
+    simg_setpixel(&img, 13, 10, 3, temp[0]);
+    simg_setpixel(&img, 14, 10, 3, temp[1]);
+    simg_setpixel(&img, 15, 10, 3, temp[2]);
+    //.
+    simg_setpixel(&img, 17, 10, 3, temp[4]);
+    simg_setpixel(&img, 18, 10, 3, temp[5]);
+
+    //probability
+    simg_setpixel(&img, 13, 9, 3, 'A');
+    simg_setpixel(&img, 14, 9, 3, 'B');
+
+    //length
+
+    sprintf(temp, "%02d", (flag.numLats * info.freq / 60) % 60);
+    //minutes
+    simg_setpixel(&img, 13, 8, 3, temp[0]);
+    simg_setpixel(&img, 14, 8, 3, temp[1]);
+
+    sprintf(temp, "%02d", (flag.numLats * info.freq) % 60);
+    //seconds
+    simg_setpixel(&img, 16, 8, 3, temp[0]);
+    simg_setpixel(&img, 17, 8, 3, temp[1]);
+
+
+    editorRefreshScreen(&img);
+}
 
 void updateInfo(Info info) {
     //frequency
-    simg_setpixel(&img, 15, 2, 1, 'X');
-    simg_setpixel(&img, 14, 2, 1, 'X');
+    char temp[10];
+    sprintf(temp, "%d", info.freq);
+    simg_setpixel(&img, 15, 2, 3, temp[1]);
+    simg_setpixel(&img, 14, 2, 3, temp[0]);
 
     //total time
+    sprintf(temp, "%02d", info.time / 86400);
     //days
-    simg_setpixel(&img, 38, 2, 1, 'A');
-    simg_setpixel(&img, 39, 2, 1, 'B');
+    simg_setpixel(&img, 38, 2, 3, temp[0]);
+    simg_setpixel(&img, 39, 2, 3, temp[1]);
+
+    sprintf(temp, "%02d", (info.time / 3600)%24);
     //hours
-    simg_setpixel(&img, 41, 2, 1, 'C');
-    simg_setpixel(&img, 42, 2, 1, 'D');
+    simg_setpixel(&img, 41, 2, 3, temp[0]);
+    simg_setpixel(&img, 42, 2, 3, temp[1]);
+
+    sprintf(temp, "%02d", (info.time / 60) % 60);
     //minutes
-    simg_setpixel(&img, 44, 2, 1, 'E');
-    simg_setpixel(&img, 45, 2, 1, 'F');
+    simg_setpixel(&img, 44, 2, 3, temp[0]);
+    simg_setpixel(&img, 45, 2, 3, temp[1]);
 
     //network faults
-    simg_setpixel(&img, 70, 2, 1, 'Y');
-    simg_setpixel(&img, 71, 2, 1, 'Y');
+    sprintf(temp, "%d", info.netf);
+
+    simg_setpixel(&img, 70, 2, 3, '0');
+    simg_setpixel(&img, 71, 2, 3, temp[0]);
 
     editorRefreshScreen(&img);
-    printf("%d", info.freq);
 }
 
-void updateWin(Bar bar, Flag flag, Info info) { //Period per, 
-    // if(bar != NULL) {
-    //     updateBars(bar);
-    // }
-    // if(per != NULL) {
-    //     updatePeriod(per);
-    // }
-    // if(flag != NULL) {
-    //     updateFlag(flag);
-    //     editorProcessKeypress(&img); //this triggers a wait
-    // }
-    updateFlag(flag);
+void updateWin(Bar bar, Period per, Flag flag, Info info) {
+    updatePeriod(per, info);
+    updateFlag(flag, info);
     updateBars(bar);
     updateInfo(info);
 }
