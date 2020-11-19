@@ -226,8 +226,9 @@ void editorRefreshScreen(simg_img *img) {
     simg_print(img);
 }
 
-void editorProcessKeypress(simg_img *img) {
+void editorProcessKeypress(simg_img *img, char *cmd) {
     char c = editorReadKey();
+    cmd[0] = c;
     switch (c) {
         case 'p': //start/pause
             printf("paused");
@@ -237,9 +238,6 @@ void editorProcessKeypress(simg_img *img) {
             break;
 
         case 'z': //start/pause
-            printf("paused");
-            fflush(NULL);
-            editorReadKey();
             editorRefreshScreen(img);
             break;
 
@@ -266,10 +264,11 @@ typedef struct {
 }   Bar;
 
 struct Flag{
-    int start; // starting index of the spike
+    int start = 0; // starting index of the spike
     VECT<int> latencies; // list of spiked latencies (use to calculate mean latency during the spike)
     int numLats = 0; // number of spiking latencies
-    double avgLat; // the overage latency over the course of the spike
+    double avgLat = 0; // the overage latency over the course of the spike
+    int prob = 0; // this is the probability of the flag being a fault
 
 //-----------------Constructors-------------------------
 //------------------------------------------------------
@@ -317,9 +316,9 @@ struct Period{
 };
 
 typedef struct {
-    int time;
-    int freq;
-    int netf;
+    int time = 0;
+    int freq = 0;
+    int netf = 0;
 }   Info;
 
 void updatePeriod(Period per, Info info) {
@@ -380,9 +379,11 @@ void updateFlag(Flag flag, Info info) {
     simg_setpixel(&img, 17, 10, 3, temp[4]);
     simg_setpixel(&img, 18, 10, 3, temp[5]);
 
+
+    sprintf(temp, "%02d", flag.prob);
     //probability
-    simg_setpixel(&img, 13, 9, 3, 'A');
-    simg_setpixel(&img, 14, 9, 3, 'B');
+    simg_setpixel(&img, 13, 9, 3, temp[0]);
+    simg_setpixel(&img, 14, 9, 3, temp[1]);
 
     //length
 
@@ -430,13 +431,17 @@ void updateInfo(Info info) {
     simg_setpixel(&img, 71, 2, 3, temp[0]);
 
     editorRefreshScreen(&img);
+
 }
 
-void updateWin(Bar bar, Period per, Flag flag, Info info) {
+void updateWin(Bar bar, Period per, Flag flag, Info info, char* cmd) {
     updatePeriod(per, info);
     updateFlag(flag, info);
     updateBars(bar);
     updateInfo(info);
+    if(cmd[0] != 'z') {
+        editorProcessKeypress(&img, cmd);
+    }
 }
 
 #endif

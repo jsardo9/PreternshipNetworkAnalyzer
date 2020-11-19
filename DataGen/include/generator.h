@@ -54,10 +54,8 @@ int genLat(int lat) {
 int genSpike(int freq) {
     int numAdded = 0;
     int spikeTime = 60 * ((rand() % 5) + 3); //average time for a spike is 2 - 7 min (converted to seconds)
-    // COUT << "spike time: " << spikeTime << ENDL;
-    int lat = (rand() % 500) + 150; //generate random latency between 150 - 650
-    // FST data;
-    // data.open("data.txt", APP);
+    int lat = (rand() % 300) + 150; //generate random latency between 150 - 650
+
 
     while(spikeTime >= freq) {
         data << lat << "\n";
@@ -65,8 +63,7 @@ int genSpike(int freq) {
         spikeTime -= freq;
         numAdded++;
     }
-    // COUT << "added: " << numAdded << ENDL;
-    // data.close();
+
     flags++;
     return numAdded;
 }
@@ -99,11 +96,8 @@ int generate(int time, int freq, int expected, int seed) {
             prev = 0;
         }
         else {
-            // COUT << "making data" << ENDL;
             lat = genLat(40);
-            // data.open("data.txt", APP); //this is not ideal... I need to better understand file writing...
             data << lat << '\n';
-            // data.close();
             prev++;
         }
     }
