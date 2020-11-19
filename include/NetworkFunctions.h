@@ -11,7 +11,8 @@
 #define NETWORKFUNCTIONS_H
 
 // #include "../include/Flag.h"
-#include "../include/Period.h"
+#include "Period.h"
+#include "window.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,24 +20,28 @@
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
+#include <cmath>
 
 #define COUT std::cout
 #define ENDL std::endl
 #define IFST std::ifstream
-#define RD std::getline
 #define STR std::string
-// #define VECT std::vector
-
-VECT<int> collectFlags() {
-    VECT<int> flags;
-
-
-    return flags;
-}
+#define LIST std::list
+#define ADV std::advance
+//
+// double variance() {
+//
+//     return var;
+// }
+//
+// double fTest() {
+//
+//     return val;
+// }
 
 int checkLat(int latency) {
     if(latency > 100) {
-        COUT << latency << ENDL;
+        // COUT << latency << ENDL;
         return 1;
     }
     return 0;
