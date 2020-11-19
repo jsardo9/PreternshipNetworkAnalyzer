@@ -10,8 +10,6 @@
 #ifndef NETWORKFUNCTIONS_H
 #define NETWORKFUNCTIONS_H
 
-// #include "../include/Flag.h"
-#include "Period.h"
 #include "window.h"
 
 #include <stdio.h>
@@ -21,6 +19,8 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
+#include <termios.h>
+#include <unistd.h>
 
 #define COUT std::cout
 #define ENDL std::endl
@@ -28,16 +28,6 @@
 #define STR std::string
 #define LIST std::list
 #define ADV std::advance
-//
-// double variance() {
-//
-//     return var;
-// }
-//
-// double fTest() {
-//
-//     return val;
-// }
 
 int checkLat(int latency) {
     if(latency > 100) {

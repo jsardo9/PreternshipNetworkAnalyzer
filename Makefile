@@ -5,8 +5,8 @@
 # G++ is for the GCC compiler for C++
 PP := g++
 
-# CXXFLAGS are the compiler flages for when we compile C++ code in this course
-FLAGS := -O0 -g -Wall -Wextra -Wconversion -Wshadow -pedantic -Werror
+# CXXFLAGS are the compiler flages for when we compile C++ code in this course -Wconversion
+FLAGS := -O0 -g -Wall -Wextra -Wshadow -pedantic -Werror
 CXXFLAGS := -m64 -std=c++11 -Weffc++ $(FLAGS)
 
 # Variables for Folders
