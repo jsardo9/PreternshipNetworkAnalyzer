@@ -13,12 +13,9 @@
 #include <list>
 
 #include "../include/NetworkFunctions.h"
-// #include "../include/window.h"
 
 int main() {
     enableRawMode();
-    // printf("this is a test");
-    // fflush(NULL);
     initWindow();
 
     //---------Key Data Structures and Variables------------
@@ -48,83 +45,62 @@ int main() {
             inData.getline(line, 20);
             args.push_back(atoi(line));
         }
-        // for(int arg : args) {
-        //     COUT << arg << ENDL;
-        // }
-        // COUT << "args done" << ENDL;
-
-        // Info info = Info();
-        // info.time = 90120;
-        // info.freq = args[2];
-        // info.netf = 0;
-        //
-        // Flag flag = Flag();
-        // flag.start = 1;
-        // flag.latencies.push_back(189);
-        // flag.latencies.push_back(130);
-        // flag.numLats = 2;
-        // flag.avgLatCalculation();
-        // printf("%f\n", flag.avgLat);
-        //
-        // Period period = Period();
-        // period.tPeriod = 12;
-        // period.flags.push_back(flag);
-        //
-        // Bar b = Bar();
-        // b.r = 2;
-        // b.bars = 10;
-        updateWin(b, period, flag, info);
-
-
 
 
         //----this will read through the entire set of data ---
-        for(int i = 1; i <= args.at(0); i++) {
-
-            inData.getline(line, 20);
-            if(checkLat(atoi(line))) {
-                Flag flag = Flag();
-                flag.start = i;
-                while(checkLat(atoi(line))) {
-                    flag.latencies.push_back(atoi(line));
-                    flag.numLats++;
-                    inData.getline(line, 20);
-                    i++;
+        Info info = Info();
+        info.freq = args[2];
+        Flag flag = Flag();
+        char cmd;
+        for(int j = 1; j <= 12; j++) {
+            Period per = Period();
+            per.tPeriod = 12;
+            networkPeriods.push_front(per);
+            for(int k = 1; k <= 2880; k++) {
+                inData.getline(line, 20);
+                if(checkLat(atoi(line))) {
+                    Bar bar = Bar();
+                    bar.r = 1;
+                    flag = Flag();
+                    flag.start = k;
+                    while(checkLat(atoi(line))) {
+                        flag.latencies.push_back(atoi(line));
+                        flag.numLats++;
+                        inData.getline(line, 20);
+                        k++;
+                    }
+                    flag.avgLatCalculation();
+                    bar.bars = (int)(flag.avgLat / 10);
+                    per.flags.push_back(flag);
+                    networkPeriods.pop_front();
+                    networkPeriods.push_front(per);
+                    if(j > 1) {
+                        flag.prob = calcProb(networkPeriods);
+                        if(flag.prob < 80) {
+                            info.netf++;
+                        }
+                    }
+                    info.time = ((j - 1) * 3600 * 12) + (k * info.freq);
+                    cmd = 'a';
+                    updateWin(bar, per, flag, info, &cmd);
                 }
-                flag.avgLatCalculation();
-                flags.push_back(flag);
-                COUT << "flag made with avg: " << flag.avgLat << ENDL;
-            }
-            else {
-
+                else if(k % 20 == 0) {
+                    info.time = ((j - 1) * 3600 * 12) + (k * info.freq);
+                    Bar bar = Bar();
+                    bar.r = 2;
+                    bar.bars = (int)(atoi(line) / 5);
+                    updateWin(bar, per, flag, info, &cmd);
+                    //pass info
+                }
             }
         }
+
         inData.close();
     }
     else {
         COUT << "Error opening the input file" << ENDL;
         return 0;
     }
-
-    //----Now we are going to begin comparing the periods and locate flags ---------
-
-    //----lets make the periods and link them in the list --------------------------
-    for(int time = 0; time < args.at(1); time += 12) {
-        Period period = Period();
-        period.tPeriod = 12;
-        networkPeriods.push_back(period);
-    }
-
-    //----lets split the flags up into periods -------------------------------------
-    for(Flag flag : flags) {
-        int time = (int)((flag.start * args.at(2) / 3600)/12);
-        auto front = networkPeriods.begin();
-        ADV(front,time);
-        front->flags.push_back(flag);
-    }
-
-    //-----Now lets compare the periods --------------------------------------------
-
 
     disableRawMode();
     return 0;
