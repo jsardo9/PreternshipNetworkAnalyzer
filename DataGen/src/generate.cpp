@@ -9,9 +9,11 @@
 
 #include "../include/generator.h"
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[])
+{
     //this is a simple help statement if the user does not include the correct arguements
-    if(argc != 5) {
+    if (argc != 5)
+    {
         COUT << "Incorrect arguements" << ENDL;
         COUT << "example: ./generate [time] [frequency] [expected] [seed]" << ENDL;
         COUT << "[time] = int value in hours ex. 24 or 48" << ENDL;
@@ -22,14 +24,15 @@ int main(int argc, char* argv[]) {
         COUT << "one line for each 60 seconds from 0 to 6 hours." << ENDL;
         return 0;
     }
-    else {
+    else
+    {
         int time = atoi(argv[1]);
         int freq = atoi(argv[2]);
         int expected = atoi(argv[3]);
         int seed = atoi(argv[4]);
         int numData = 0;
         numData = generate(time, freq, expected, seed);
-        COUT << numData << " data entries were generated" << ENDL;
+        //COUT << numData << " data entries were generated" << ENDL;
     }
 
     return 0;

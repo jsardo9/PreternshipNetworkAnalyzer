@@ -17,29 +17,32 @@ EXE := exe
 
 # Command: make NetworkAssess
 NetworkAssessObjs := $(OBJ)/NetworkAssess.o
-
-NetworkFunctions: $(NetworkAssessObjs)
-	$(PP) $(CXXFLAGS) -o $(EXE)/NetworkAssess $(NetworkAssessObjs)
+NetworkFunctionsObjs := $(OBJ)/NetworkFunctions.o
 
 $(OBJ)/NetworkAssess.o: $(SRC)/NetworkAssess.cpp
 	$(PP) $(CXXFLAGS) -c $(SRC)/NetworkAssess.cpp -o $@
 
-NetworkFunctionsObjs := $(OBJ)/NetworkFunctions.o
-
-NetworkAssess: $(NetworkFunctionsObjs)
-	$(PP) $(CXXFLAGS) -o $(EXE)/NetworkFunctions $(NetworkFunctionsObjs)
-	$(EXE)/./NetworkAssess
-
 $(OBJ)/NetworkFunctions.o: $(SRC)/NetworkAssess.cpp $(INC)/NetworkFunctions.h
 	$(PP) $(CXXFLAGS) -c $(SRC)/NetworkAssess.cpp -o $@
+
+NetworkFunctions: initialize $(NetworkAssessObjs) $(OBJ)/NetworkAssess.o
+	$(PP) $(CXXFLAGS) -o $(EXE)/NetworkAssess $(NetworkAssessObjs)
+
+NetworkAssess: initialize NetworkFunctions $(OBJ)/NetworkAssess.o
+	$(PP) $(CXXFLAGS) -o $(EXE)/NetworkFunctions $(OBJ)/NetworkAssess.o
+	$(PP) $(CXXFLAGS) DataGen/src/generate.cpp -o DataGen/exe/generate
+	DataGen/exe/generate 12 60 4 1920
+	$(EXE)/NetworkAssess
+
+
 
 # Make all
 all: NetworkFunctions NetworkAssess
 
 # make initialize to create folders for the objects and executables
-initialize:
-	mkdir $(OBJ) $(EXE)
+initialize: clean
+	mkdir $(OBJ) $(EXE) DataGen/exe DataGen/data
 
 # Make clean
 clean :
-	rm -rf *.o $(OBJ)/* $(EXE)/*
+	rm -rf $(OBJ) $(EXE) DataGen/exe DataGen/data
